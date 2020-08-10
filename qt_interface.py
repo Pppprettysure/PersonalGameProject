@@ -1,81 +1,115 @@
-"""Output for the game using QT.  
+"""I/O handling for the game using QT.
 """
 
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import (QApplication, QWidget, QHBoxLayout, QGroupBox,
+                             QVBoxLayout, QLabel, QComboBox, QTextEdit)
 
 
-class window():
-    # action_menu_list = []
+class Window():
+    """A class representing the QT I/O System.
+
+    Attributes
+    ----------
+
+    action_list : list
+        a list of actions available to the player
+
+
+    Methods
+    ------
+
+    update(text="", action_list=[]):
+        Takes input from logic to present to user.
+    """
+
     action_list = ['test', 'another test']
 
     def __init__(self):
         self.app = QApplication([])
         self.main_widget = QWidget()
 
-        # style and format
+        # Style and format
         self.main_widget.setWindowTitle('Game')
         self.main_layout = QHBoxLayout()
         self.main_widget.setLayout(self.main_layout)
         self.app.setStyle('fusion')
 
-        # add widgets
-        # add action_box
-        self.action_box = QGroupBox()
+        # Add actionbox, for listing action combos
+        self.actionbox = QGroupBox()
         self.action_layout = QVBoxLayout()
 
-        # add submenu to action_box
-        # self.action_menu_list += [self.add_action_menu(1)]
-        self.add_action_menu(1)
-        self.add_action_menu(1)
-        self.add_action_menu(1)
-        self.add_action_menu(1)
-        self.main_layout.addWidget(self.action_box)
+        # Add action rows to box
+        self.add_action_row()
+        self.add_action_row()
+        self.add_action_row()
+        self.add_action_row()
 
-        # set up text display
+        self.main_layout.addWidget(self.actionbox)
+
+        # Set up text display
         self.textbox = QTextEdit('some text')
         self.textbox.setReadOnly(True)
         self.main_layout.addWidget(self.textbox)
 
-        # display
+        # Display
         self.main_widget.show()
-        self.action_box.show()
-        self.update('test')
+        self.actionbox.show()
         self.app.exec_()
 
+
     def update(self, text="", action_list=[]):
+        """Hands Window updated gamestate info.
+
+        Give the full action and object list.
+
+        Parameters
+        ----------
+        text : str, optional
+            Text printed in the main console.
+
+        action_list : list, optional
+            List of actions currently available to the player.
+        """
+
         print(self.textbox)
         if text:
             self.textbox.append(text)
         if action_list:
-            self.item_list = action_list
-        # action_num = len(self.action_box.findChildren(QGroupBox))
-        # while action_num < len(self.action_menu_list):
-        #     self.action_menu_list +=
-        #     action_num += 1
+            self.action_list = action_list
+        # TODO: add object list
         self.main_widget.show()
-        pass
 
-    def add_action_menu(self, num):
-        # set up layout for submenus
-        action_menu_layout = QHBoxLayout()
-        action_menu_layout.addWidget(QLabel(str(1 + len(self.action_box.findChildren(QGroupBox)))+'.'))
+    # TODO: connect to button
+    def add_action_row(self):
+        """Adds an action row to the action menu.
+
+        For private use.
+        """
+
+        # Sets up layout for new row
+        action_row_layout = QHBoxLayout()
+        action_row_layout.addWidget(QLabel(str(1 + len(self.actionbox.findChildren(QGroupBox)))+'.'))
         action_list = QComboBox()
         for action in self.action_list:
             action_list.addItem(action)
-        action_menu_layout.addWidget(action_list)
-        action_menu_layout.addWidget(QComboBox())
+        action_row_layout.addWidget(action_list)
+        action_row_layout.addWidget(QComboBox())
 
-        # apply layout
+        # Applies layout
         new_menu = QGroupBox()
-        new_menu.setLayout(action_menu_layout)
+        new_menu.setLayout(action_row_layout)
         self.action_layout.addWidget(new_menu)
-        self.action_box.setLayout(self.action_layout)
-        # return new_menu
+        self.actionbox.setLayout(self.action_layout)
 
+    # TODO: add function for removing from actionbox
 
-try:
-    window = window()
-except Exception as error:
-    print(error)
-    while(True):
-        pass
+if __name__ == "__main__":
+    # Testing code
+    try:
+        window = Window()
+        window.update('test')
+        # TODO: is the code highjacked by the window? How do I seperate the code if that's the case?
+    except Exception as error:
+        print(error)
+        while True:
+            pass

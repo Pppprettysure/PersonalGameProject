@@ -14,6 +14,9 @@ class Window():
     action_list : list
         a list of actions available to the player
 
+    object_list : list
+        a list of objects that can be interacted with
+
 
     Methods
     ------
@@ -29,6 +32,7 @@ class Window():
     """
 
     action_list = ['test', 'another test']
+    object_list = ['person', 'door']
 
     def __init__(self):
         self.app = QApplication([])
@@ -69,7 +73,7 @@ class Window():
         self.app.exec_()
 
 
-    def update(self, text="", action_list=[]):
+    def update(self, text="", action_list=[], object_list=[]):
         """Hands Window updated gamestate info.
 
         Give the full action and object list.
@@ -81,6 +85,9 @@ class Window():
 
         action_list : list, optional
             List of actions currently available to the player.
+
+        object_list : list, optional
+            List of objects that the player can interact with.
         """
 
         print(self.textbox)
@@ -88,7 +95,8 @@ class Window():
             self.textbox.append(text)
         if action_list:
             self.action_list = action_list
-        # TODO: add object list
+        if object_list:
+            self.object_list = object_list
         self.main_widget.show()
 
     # TODO: method to change views
@@ -102,12 +110,20 @@ class Window():
 
         # Sets up layout for new row
         action_row_layout = QHBoxLayout()
-        action_row_layout.addWidget(QLabel(str(1 + len(self.actionbox.findChildren(QGroupBox)))+'.'))
+        action_row_layout.addWidget(
+            QLabel(str(1 + len(self.actionbox.findChildren(QGroupBox)))+'.')
+        )
+
         action_list = QComboBox()
         for action in self.action_list:
             action_list.addItem(action)
+
+        object_list = QComboBox()
+        for obj in self.object_list:
+            object_list.addItem(obj)
+
         action_row_layout.addWidget(action_list)
-        action_row_layout.addWidget(QComboBox())
+        action_row_layout.addWidget(object_list)
 
         # Applies layout
         new_menu = QGroupBox()
@@ -124,7 +140,6 @@ if __name__ == "__main__":
         window = Window()
         window.update('test')
         window.start()
-        # TODO: is the code highjacked by the window? How do I seperate the code if that's the case?
     except Exception as error:
         print(error)
         while True:

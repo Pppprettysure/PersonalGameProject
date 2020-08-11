@@ -2,7 +2,8 @@
 """
 
 from PyQt5.QtWidgets import (QApplication, QWidget, QHBoxLayout, QGroupBox,
-                             QVBoxLayout, QLabel, QComboBox, QTextEdit)
+                             QVBoxLayout, QLabel, QComboBox, QTextEdit,
+                             QPushButton)
 
 
 class Window():
@@ -50,9 +51,11 @@ class Window():
 
         # Add action rows to box
         self.add_action_row()
-        self.add_action_row()
-        self.add_action_row()
-        self.add_action_row()
+
+        # Add button to add action rows
+        add_button = QPushButton('Add')
+        add_button.clicked.connect(self.add_action_row)
+        self.action_layout.addWidget(add_button)
 
         self.main_layout.addWidget(self.actionbox)
 
@@ -100,8 +103,9 @@ class Window():
         self.main_widget.show()
 
     # TODO: method to change views
+    # TODO: make it possible to swap position of actions
+    # TODO: make action list a fixed size that scrolls
 
-    # TODO: connect to button
     def add_action_row(self):
         """Adds an action row to the action menu.
 
@@ -110,9 +114,8 @@ class Window():
 
         # Sets up layout for new row
         action_row_layout = QHBoxLayout()
-        action_row_layout.addWidget(
-            QLabel(str(1 + len(self.actionbox.findChildren(QGroupBox)))+'.')
-        )
+        action_num = len(self.actionbox.findChildren(QGroupBox))
+        action_row_layout.addWidget(QLabel(str(1 + action_num) + '.'))
 
         action_list = QComboBox()
         for action in self.action_list:
@@ -128,7 +131,7 @@ class Window():
         # Applies layout
         new_menu = QGroupBox()
         new_menu.setLayout(action_row_layout)
-        self.action_layout.addWidget(new_menu)
+        self.action_layout.insertWidget(action_num, new_menu)
         self.actionbox.setLayout(self.action_layout)
 
     # TODO: add function for removing from actionbox

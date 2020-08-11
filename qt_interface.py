@@ -18,8 +18,14 @@ class Window():
     Methods
     ------
 
+    start():
+       Begins execution of QApplication. Init only sets up window.
+
     update(text="", action_list=[]):
         Takes input from logic to present to user.
+
+    change_view(view):
+        Changes to new view (menu system).
     """
 
     action_list = ['test', 'another test']
@@ -54,6 +60,12 @@ class Window():
         # Display
         self.main_widget.show()
         self.actionbox.show()
+
+    def start(self):
+        """ Begins execution of QApplication.
+
+            Must be ran in main thread.
+        """
         self.app.exec_()
 
 
@@ -79,6 +91,8 @@ class Window():
         # TODO: add object list
         self.main_widget.show()
 
+    # TODO: method to change views
+
     # TODO: connect to button
     def add_action_row(self):
         """Adds an action row to the action menu.
@@ -103,11 +117,13 @@ class Window():
 
     # TODO: add function for removing from actionbox
 
+
 if __name__ == "__main__":
     # Testing code
     try:
         window = Window()
         window.update('test')
+        window.start()
         # TODO: is the code highjacked by the window? How do I seperate the code if that's the case?
     except Exception as error:
         print(error)

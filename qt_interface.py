@@ -105,7 +105,9 @@ class Window():
     # TODO: method to change views
     # TODO: make it possible to swap position of actions
     # TODO: make action list a fixed size that scrolls
-
+    # TODO: resize widgets to be proper sizes
+    # TODO: what happens if you open infinite amount of these things
+    # TODO: add below that row
     def add_action_row(self):
         """Adds an action row to the action menu.
 
@@ -128,11 +130,38 @@ class Window():
         action_row_layout.addWidget(action_list)
         action_row_layout.addWidget(object_list)
 
+        delete_button = QPushButton('-')
+        action_row_layout.addWidget(delete_button)
+
         # Applies layout
         new_menu = QGroupBox()
         new_menu.setLayout(action_row_layout)
+
+        delete_button.clicked.connect(lambda: self.remove_action_row(new_menu))
+
         self.action_layout.insertWidget(action_num, new_menu)
         self.actionbox.setLayout(self.action_layout)
+
+    def remove_action_row(self, row):
+        """Removes an action row from the action menu.
+
+        For private use, call ignored if only one box remains.
+
+        Paramaters
+        ----------
+        row : QGroupBox
+            The row to be removed.
+        """
+        children = self.actionbox.findChildren(QGroupBox)
+        if len(children) > 1:
+            row.setParent(None)  # widgets are deleted when parents are
+
+            # Update number labels; has to be updated once child was removed
+            children = self.actionbox.findChildren(QGroupBox)
+            action_num = 0
+            for child in children:
+                action_num += 1
+                child.findChild(QLabel).setText(str(action_num) + '.')
 
     # TODO: add function for removing from actionbox
 

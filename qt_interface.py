@@ -35,7 +35,9 @@ class Window():
     action_list = ['test', 'another test']
     object_list = ['person', 'door']
 
-    def __init__(self):
+    def __init__(self, game):
+        self.game = game
+
         self.app = QApplication([])
         self.main_widget = QWidget()
 
@@ -57,6 +59,11 @@ class Window():
         add_button.clicked.connect(self.add_action_row)
         self.action_layout.addWidget(add_button)
 
+        # Add submit button
+        submit_button = QPushButton('Submit')
+        submit_button.clicked.connect(self.send_input)
+        self.action_layout.addWidget(submit_button)
+
         self.main_layout.addWidget(self.actionbox)
 
         # Set up text display
@@ -74,6 +81,18 @@ class Window():
             Must be ran in main thread.
         """
         self.app.exec_()
+
+    def send_input(self):
+        # TODO: how to implement without entanglement?
+        # TODO: add action row list instead of searching for children all the time
+        children = self.actionbox.findChildren(QGroupBox)
+        actions, objects = [], []
+        for child in children:
+            lists = child.findChildren(QComboBox)
+            actions.append(str(lists[0].currentText()))
+            objects.append(str(lists[1].currentText()))
+            # TODO: send selection in lists not the object
+        self.game.process_input(actions, objects)
 
 
     def update(self, text="", action_list=[], object_list=[]):

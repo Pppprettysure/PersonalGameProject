@@ -119,6 +119,19 @@ class Window():
             self.action_list = action_list
         if object_list:
             self.object_list = object_list
+
+        # Replace dropdown boxes with new lists
+        if action_list or object_list:
+            children = self.actionbox.findChildren(QGroupBox)
+            for child in children:
+                dropdowns = child.findChildren(QComboBox)
+                if action_list:
+                    dropdowns[0].clear()
+                    dropdowns[0].addItems(action_list)
+                if object_list:
+                    dropdowns[1].clear()
+                    dropdowns[1].addItems(object_list)
+
         self.main_widget.show()
 
     # TODO: method to change views

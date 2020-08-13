@@ -5,6 +5,7 @@ def main():
     """ Kicks off game logic
     """
     window.update("okay")
+    window.update(action_list=['talk', 'bond'], object_list=['man', 'trashcan'])
 
 class Game():
     def __init__(self):

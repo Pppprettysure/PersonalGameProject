@@ -8,6 +8,8 @@ def main():
     window.update(action_list=['talk', 'bond'], object_list=['man', 'trashcan'])
 
 class Game():
+    ''' Contains foundational game logic.
+    '''
     def __init__(self):
         pass
 
